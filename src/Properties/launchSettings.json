@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Docker": {
+      "commandName": "Docker",
+      "environmentVariables": {
+        "IPDNS_DEBUG": "yes"
+      },
+      "publishAllPorts": true
+    }
+  }
+}

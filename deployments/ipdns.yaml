@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ipdns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ipdns
+  template:
+    metadata:
+      labels:
+        app: ipdns
+    spec:
+      containers:
+      - name: ipdns
+        image: xieyubo/ipdns:test
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5533
+          protocol: UDP
+      nodeSelector:
+        kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ipdns
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 20.22.163.25
+  ports:
+  - port: 53
+    targetPort: 5533
+    protocol: UDP
+  selector:
+    app: ipdns
