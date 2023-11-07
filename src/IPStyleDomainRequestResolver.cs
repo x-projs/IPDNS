@@ -11,7 +11,7 @@ namespace IPDNS;
 
 internal class IPStyleDomainRequestResolver : IRequestResolver
 {
-    private static Regex _ipPattern = new Regex(@"^(\d+\.\d+\.\d+\.\d+)\.");
+    private static Regex _ipPattern = new Regex(@"^(\d+-\d+-\d+-\d+)\.");
 
     public Task<IResponse> Resolve(IRequest request, CancellationToken cancellationToken = default)
     {
@@ -22,7 +22,7 @@ internal class IPStyleDomainRequestResolver : IRequestResolver
             if (question.Type == RecordType.A)
             {
                 var match = _ipPattern.Match(question.Name.ToString());
-                if (match.Success && IPAddress.TryParse(match.Groups[1].Value, out var ipAddress))
+                if (match.Success && IPAddress.TryParse(match.Groups[1].Value.Replace("-", "."), out var ipAddress))
                 {
                     response.AnswerRecords.Add(new IPAddressResourceRecord(question.Name, ipAddress, ttl: TimeSpan.FromDays(3650)));
                 }
